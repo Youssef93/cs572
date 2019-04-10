@@ -34,12 +34,15 @@ const queries = async function () {
     result = await collection.aggregate([
         {
             $group: {
-                _id: "$city",
+                _id: { city: "$city", state: "$state"},
                 count: { $sum: 1}
             }
         },
         {
             $match: { count: { $gt: 1} }
+        },
+        {
+            $sort: { "_id.state": 1, "_id.city": 1}
         },
         {
             $project: { count: 0 }
